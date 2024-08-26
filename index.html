@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gemini +</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/13.1.0/math.min.js"></script>
+</head>
+
+<body>
+  <div id="error-messages" class="error-messages"></div>
+  <div class="input-container">
+    <textarea class="input-bar" placeholder="Type a message..."></textarea>
+
+    <button class="upload-button" onclick="document.getElementById('file-input').click()">
+      <svg width="40" height="40" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="25" fill="#404040" />
+        <path d="M25 15 V35 M15 25 H35" fill="none" stroke="#D3D3D3" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </button>
+
+    <input type="file" id="file-input" style="display: none;" onchange="handleFileUpload(event)" multiple>
+
+    <button class="send-button" onclick="sendMessage()">
+      <svg width="40" height="40" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="25" fill="#404040" />
+        <path d="M15 30 Q 25 15, 35 30" fill="none" stroke="#D3D3D3" stroke-width="5" stroke-linecap="round" />
+      </svg>
+    </button>
+  </div>
+  <div class="attachments-container" id="attachments-container"></div>
+  <div class="response-container" id="response-container"></div>
+  <script type="module" src="script.js"></script>
+</body>
+
+</html>

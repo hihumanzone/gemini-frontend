@@ -1,0 +1,147 @@
+body {
+  background-color: #121212;
+  color: #ffffff;
+  font-family: 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-wrap: anywhere;
+  word-wrap: anywhere;
+}
+
+.input-container {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background-color: #333;
+  border-radius: 50px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  padding: 10px;
+  width: calc(100% - 40px);
+  max-width: 600px;
+}
+
+.input-bar {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 16px;
+  padding: 10px;
+  resize: none;
+  overflow-y: auto;
+  height: 20px;
+  max-height: 200px;
+}
+
+.input-bar::placeholder {
+  color: #bbb;
+}
+
+.send-button, .upload-button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.response-container {
+  padding: 20px;
+  margin-bottom: 80px;
+  color: #ffffff;
+}
+
+.error-messages {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4c4c;
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: #ffffff;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  max-width: 600px;
+}
+
+.error-messages.show {
+  opacity: 1;
+}
+
+/* Blinking Circle CSS */
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+.blinking-circle {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: darkgray;
+  margin-left: 5px;
+  vertical-align: middle;
+  animation: blink 1s infinite;
+}
+
+/* Existing styles... */
+
+.attachments-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px 0;
+  justify-content: center;
+}
+
+.attachment-preview {
+  position: relative;
+  margin: 5px;
+  border: 1px solid #333;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.attachment-preview img,
+.attachment-preview video {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.attachment-preview .remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.fallback-preview {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #404040;
+  color: #fff;
+  font-size: 12px;
+  text-align: center;
+}
