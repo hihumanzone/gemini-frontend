@@ -7,7 +7,9 @@ const MAX_ATTACHMENTS = 10;
 const supportedFileExtensions = [
   'html', 'js', 'css', 'json', 'xml', 'csv', 'py', 'java', 'sql', 'log', 'md', 'txt', 'pdf', 'docx'
 ];
-const systemPrompt = "You are Gemini, a helpful assistant with the ability to perform web searches and view websites using the tools provided. You are a multimodal model, equipped with the ability to read images, videos, and audio files. If you receive any of these from the user, do your best to interpret them. When a user asks you a question and you are uncertain or don't know about the topic, or if you simply want to learn more, you can use web search and search different websites to find up-to-date information on that topic. You can retrieve the content of webpages from search result links using the Search Website tool. Use several tool calls consecutively, performing deep searches and trying your best to extract relevant and helpful information before responding to the user.";
+let stopGenerationFlag = false;
+
+const systemPrompt = "You are Gemini, a helpful assistant with the ability to perform web searches and view websites using the tools provided. When a user asks you a question and you are uncertain or don't know about the topic, or if you simply want to learn more, you can use web search and search different websites to find up-to-date information on that topic. You can retrieve the content of webpages from search result links using the Search Website tool. Use several tool calls consecutively, performing deep searches and trying your best to extract relevant and helpful information before responding to the user. You are a multimodal model, equipped with the ability to read images, videos, and audio files.";
 
 const function_declarations = [
   {
@@ -66,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       return;
     }
   }
-  
+
   const { GoogleGenerativeAI } = await import("https://esm.run/@google/generative-ai");
 
   const textarea = document.querySelector('.input-bar');
@@ -85,6 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   window.sendMessage = sendMessage;
   window.handleFileUpload = handleFileUpload;
+  window.stopGeneration = stopGeneration;
 });
 
 function autoResize() {
@@ -186,6 +189,7 @@ async function fileToGenerativePart(file) {
 }
 
 async function sendMessage() {
+  stopGenerationFlag = false; // Reset the flag when a new message is sent
   const chat = model.startChat({ history: getHistory() });
   const newHistory = [];
   const input = document.querySelector('.input-bar');
@@ -195,7 +199,7 @@ async function sendMessage() {
   const attachmentParts = await Promise.all(
     attachments.map(async (attachment) => await fileToGenerativePart(attachment.file))
   );
-  const userParts = [{ text: message}, ...attachmentParts];
+  const userParts = [{ text: message }, ...attachmentParts];
 
   newHistory.push({ role: 'user', content: userParts });
 
@@ -212,16 +216,19 @@ async function sendMessage() {
 
   try {
     let fullResponse = "";
+    let realResponse = "";
     const md = new markdownit();
     await getResponse(userParts);
     async function getResponse(message) {
       const result = await chat.sendMessageStream(message);
       for await (const chunk of result.stream) {
+        if (stopGenerationFlag) return;
         const chunkText = await chunk.text();
         fullResponse += chunkText;
+        realResponse += chunkText;
         const renderedHTML = md.render(fullResponse);
         botResponseElement.innerHTML = renderedHTML + '<span class="blinking-circle"></span>';
-        
+
         const toolCalls = chunk.functionCalls();
         if (toolCalls) {
           function convertArrayFormat(inputArray) {
@@ -243,7 +250,7 @@ async function sendMessage() {
             toolCallsResults.push(result);
           }
           newHistory.push({ role: 'user', content: toolCallsResults });
-          return await getResponse(toolCallsResults);
+          if (!stopGenerationFlag) await getResponse(toolCallsResults);
         }
       }
     }
@@ -253,7 +260,7 @@ async function sendMessage() {
       blinkingCircle.remove();
     }
 
-    newHistory.push({ role: 'assistant', content: [{ text: fullResponse }] });
+    newHistory.push({ role: 'assistant', content: [{ text: realResponse }] });
     updateChatHistory(newHistory);
   } catch (error) {
     showErrorMessage(error.message);
@@ -261,6 +268,14 @@ async function sendMessage() {
     if (blinkingCircle) {
       blinkingCircle.remove();
     }
+  }
+}
+
+function stopGeneration() {
+  stopGenerationFlag = true;
+  const blinkingCircle = document.querySelector('.blinking-circle');
+  if (blinkingCircle) {
+    blinkingCircle.remove();
   }
 }
 
