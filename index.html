@@ -12,6 +12,13 @@
 <body>
   <div id="error-messages" class="error-messages"></div>
   <div class="input-container">
+    <button class="stop-button" onclick="stopGeneration()">
+      <svg width="40" height="40" viewBox="0 0 50 50">
+        <circle cx="25" cy="25" r="25" fill="#404040" />
+        <rect x="15" y="15" width="20" height="20" fill="#D3D3D3" />
+      </svg>
+    </button>
+
     <textarea class="input-bar" placeholder="Type a message..."></textarea>
 
     <button class="upload-button" onclick="document.getElementById('file-input').click()">
@@ -35,4 +42,5 @@
   <script type="module" src="script.js"></script>
 </body>
 
+</html>
 </html>
