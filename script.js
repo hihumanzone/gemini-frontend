@@ -370,7 +370,7 @@ async function searchWebpage(args, name) {
 }
 
 async function searchWebpageContent(url) {
-  const CORS_PROXY = "https://cloudflare-cors-anywhere.queakchannel42.workers.dev/?";
+  const CORS_PROXY = "https://cloudflare-cors-anywhere.queakchannel42.workers.dev/";
   const TIMEOUT = 5000; // 5 seconds
 
   const timeoutPromise = new Promise((_, reject) =>
@@ -404,7 +404,7 @@ async function searchWebpageContent(url) {
 }
 
 async function performSearch(query) {
-  const CORS_PROXY = "https://cloudflare-cors-anywhere.queakchannel42.workers.dev/?";
+  const CORS_PROXY = "https://cloudflare-cors-anywhere.queakchannel42.workers.dev/";
   const url = `https://search.neuranet-ai.com/search?query=${encodeURIComponent(query)}&limit=5`;
 
   try {
