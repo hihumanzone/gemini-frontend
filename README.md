@@ -1,1 +1,1 @@
-https://cors-anywhere.herokuapp.com/
+nothing

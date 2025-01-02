@@ -43,7 +43,8 @@ body {
 
 .send-button,
 .upload-button,
-.stop-button {
+.stop-button,
+.settings-button {
   background: none;
   border: none;
   outline: none;
@@ -52,6 +53,69 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.settings-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-menu {
+  position: absolute;
+  bottom: 120%;
+  right: 0;
+  background-color: #404040;
+  border-radius: 10px;
+  padding: 10px;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  width: 150px;
+}
+
+.settings-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #D3D3D3;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin: 8px 0;
+  cursor: pointer;
+}
+
+.radio-custom {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #D3D3D3;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.radio-custom::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background-color: #D3D3D3;
+  border-radius: 50%;
+  display: none;
+}
+
+.radio-label input:checked+.radio-custom::after {
+  display: block;
+}
+
+.radio-label input[type="radio"] {
+  position: absolute;
+  opacity: 0;
 }
 
 .response-container {

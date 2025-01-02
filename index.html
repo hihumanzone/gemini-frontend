@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,28 +7,49 @@
   <link rel="stylesheet" href="styles.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/13.1.0/math.min.js"></script>
 </head>
-
 <body>
   <div id="error-messages" class="error-messages"></div>
   <div class="input-container">
-    <button class="stop-button" onclick="stopGeneration()">
+    <button class="stop-button" onclick="stopGeneration()" style="display: none;">
       <svg width="40" height="40" viewBox="0 0 50 50">
         <circle cx="25" cy="25" r="25" fill="#404040" />
         <rect x="15" y="15" width="20" height="20" fill="#D3D3D3" />
       </svg>
     </button>
-
     <textarea class="input-bar" placeholder="Type a message..."></textarea>
-
     <button class="upload-button" onclick="document.getElementById('file-input').click()">
       <svg width="40" height="40" viewBox="0 0 50 50">
         <circle cx="25" cy="25" r="25" fill="#404040" />
         <path d="M25 15 V35 M15 25 H35" fill="none" stroke="#D3D3D3" stroke-width="5" stroke-linecap="round" />
       </svg>
     </button>
-
     <input type="file" id="file-input" style="display: none;" onchange="handleFileUpload(event)" multiple>
-
+    <div class="settings-container">
+      <button class="settings-button" onclick="toggleSettingsMenu()">
+        <svg width="40" height="40" viewBox="0 0 50 50">
+          <circle cx="25" cy="25" r="25" fill="#404040" />
+          <path d="M25 15 L28 20 L25 25 L22 20 Z M25 35 L28 30 L25 25 L22 30 Z M15 25 L20 28 L25 25 L20 22 Z M35 25 L30 28 L25 25 L30 22 Z" fill="#D3D3D3" />
+        </svg>
+      </button>
+      <div class="settings-menu" style="display: none;">
+        <div class="settings-title">Settings</div>
+        <label class="radio-label">
+          <input type="radio" name="tool-option" value="googleSearch" onchange="updateToolConfig(this.value)" checked>
+          <span class="radio-custom"></span>
+          Google Search
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="tool-option" value="codeExecution" onchange="updateToolConfig(this.value)">
+          <span class="radio-custom"></span>
+          Code Execution
+        </label>
+        <label class="radio-label">
+          <input type="radio" name="tool-option" value="none" onchange="updateToolConfig(this.value)">
+          <span class="radio-custom"></span>
+          None
+        </label>
+      </div>
+    </div>
     <button class="send-button" onclick="sendMessage()">
       <svg width="40" height="40" viewBox="0 0 50 50">
         <circle cx="25" cy="25" r="25" fill="#404040" />
@@ -41,6 +61,4 @@
   <div class="response-container" id="response-container"></div>
   <script type="module" src="script.js"></script>
 </body>
-
-</html>
 </html>
