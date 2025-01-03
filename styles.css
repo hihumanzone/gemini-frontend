@@ -1,3 +1,4 @@
+/* --- General Styles --- */
 body {
   background-color: #121212;
   color: #ffffff;
@@ -8,6 +9,7 @@ body {
   word-wrap: anywhere;
 }
 
+/* --- Input Container --- */
 .input-container {
   position: fixed;
   bottom: 20px;
@@ -55,6 +57,7 @@ body {
   justify-content: center;
 }
 
+/* --- Settings Container --- */
 .settings-container {
   position: relative;
   display: flex;
@@ -118,12 +121,191 @@ body {
   opacity: 0;
 }
 
+/* --- Response Container & Markdown --- */
 .response-container {
   padding: 20px;
   margin-bottom: 80px;
   color: #ffffff;
 }
 
+/* Headings */
+.response-container h1,
+.response-container h2,
+.response-container h3,
+.response-container h4,
+.response-container h5,
+.response-container h6 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.response-container h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+  border-bottom: 2px solid #555;
+}
+
+.response-container h2 {
+  font-size: 1.7em;
+  margin: 0.83em 0;
+  border-bottom: 1px solid #555;
+}
+
+.response-container h3 {
+  font-size: 1.5em;
+  margin: 1em 0;
+}
+
+.response-container h4 {
+  font-size: 1.3em;
+}
+
+.response-container h5 {
+  font-size: 1.2em;
+}
+
+.response-container h6 {
+  font-size: 1em;
+}
+
+/* Paragraphs */
+.response-container p {
+  margin: 1em 0;
+  line-height: 1.6;
+}
+
+/* Lists */
+.response-container ul,
+.response-container ol {
+  margin: 1em 0;
+  padding-left: 40px;
+}
+
+.response-container ul {
+  list-style-type: disc;
+}
+
+.response-container ol {
+  list-style-type: decimal;
+}
+
+.response-container li {
+  line-height: 1.6;
+}
+
+/* Blockquotes */
+.response-container blockquote {
+  margin: 1em 0;
+  padding: 10px 20px;
+  background-color: #404040;
+  border-left: 8px solid #777;
+}
+
+.response-container blockquote p {
+  margin: 0.5em 0;
+}
+
+/* Code Blocks */
+.response-container pre {
+  position: relative;
+  background-color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  overflow-x: auto;
+  margin: 1em 0;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.response-container code {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #333;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.response-container pre code {
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+/* Copy Button */
+.copy-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  background-color: #555;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.response-container pre:hover .copy-button {
+  opacity: 0.8;
+}
+
+.copy-button:focus {
+  outline: none;
+}
+
+.copy-button:active {
+  background-color: #777;
+}
+
+.copy-success {
+  background-color: #00aa00;
+}
+
+/* Tables */
+.response-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  table-layout: auto;
+}
+
+.response-container th,
+.response-container td {
+  border: 1px solid #555;
+  padding: 8px;
+  text-align: left;
+}
+
+.response-container th {
+  background-color: #404040;
+  font-weight: bold;
+}
+
+/* Horizontal Rules */
+.response-container hr {
+  border: none;
+  border-top: 1px solid #555;
+  margin: 2em 0;
+}
+
+/* Links */
+.response-container a {
+  color: #00bcd4;
+  text-decoration: none;
+}
+
+.response-container a:hover {
+  text-decoration: underline;
+}
+
+/* Images */
+.response-container img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1em 0;
+}
+
+/* --- Error Messages --- */
 .error-messages {
   position: fixed;
   top: 10px;
@@ -142,7 +324,7 @@ body {
   opacity: 1;
 }
 
-/* Blinking Circle CSS */
+/* --- Blinking Circle --- */
 @keyframes blink {
 
   0%,
@@ -166,6 +348,7 @@ body {
   animation: blink 1s infinite;
 }
 
+/* --- Attachments Container --- */
 .attachments-container {
   display: flex;
   flex-wrap: wrap;
@@ -179,6 +362,7 @@ body {
   border: 1px solid #333;
   border-radius: 5px;
   overflow: hidden;
+  cursor: pointer;
 }
 
 .attachment-preview img,
@@ -212,4 +396,26 @@ body {
   color: #fff;
   font-size: 12px;
   text-align: center;
+}
+
+/* --- Full Screen View --- */
+.full-screen-view {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.full-screen-view img,
+.full-screen-view video,
+.full-screen-view audio {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
 }

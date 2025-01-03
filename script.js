@@ -46,6 +46,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   window.stopGeneration = stopGeneration;
   window.toggleSettingsMenu = toggleSettingsMenu;
   window.updateToolConfig = updateToolConfig;
+  window.openFullScreenView = openFullScreenView;
+  window.closeFullScreenView = closeFullScreenView;
 
   if (toolConfig) {
     document.querySelector(`input[name="tool-option"][value="${toolConfig}"]`).checked = true;
@@ -128,25 +130,34 @@ function renderAttachmentsPreview() {
     const previewElement = document.createElement('div');
     previewElement.classList.add('attachment-preview');
 
+
     if (attachment.file.type.startsWith('image/')) {
       const img = document.createElement('img');
       img.src = attachment.url;
       img.onerror = () => createFallbackPreview(previewElement, attachment.file.name);
       previewElement.appendChild(img);
+      previewElement.addEventListener('click', () => openFullScreenView(attachment));
     } else if (attachment.file.type.startsWith('video/')) {
       const video = document.createElement('video');
       video.src = attachment.url;
-      video.controls = true;
+      video.addEventListener('click', (event) => {
+        event.preventDefault();
+        openFullScreenView(attachment);
+      });
       video.onerror = () => createFallbackPreview(previewElement, attachment.file.name);
       previewElement.appendChild(video);
     } else {
       createFallbackPreview(previewElement, attachment.file.name);
+      previewElement.addEventListener('click', () => openFullScreenView(attachment));
     }
 
     const removeBtn = document.createElement('button');
     removeBtn.classList.add('remove-btn');
     removeBtn.innerHTML = '×';
-    removeBtn.onclick = () => removeAttachment(index);
+    removeBtn.onclick = (event) => {
+      event.stopPropagation();
+      removeAttachment(index);
+    };
     previewElement.appendChild(removeBtn);
 
     container.appendChild(previewElement);
@@ -164,6 +175,40 @@ function createFallbackPreview(previewElement, filename) {
 function removeAttachment(index) {
   attachments.splice(index, 1);
   renderAttachmentsPreview();
+}
+
+function openFullScreenView(attachment) {
+  const fullScreenView = document.getElementById('full-screen-view');
+  fullScreenView.innerHTML = '';
+
+  if (attachment.file.type.startsWith('image/')) {
+    const img = document.createElement('img');
+    img.src = attachment.url;
+    fullScreenView.appendChild(img);
+  } else if (attachment.file.type.startsWith('video/')) {
+    const video = document.createElement('video');
+    video.src = attachment.url;
+    video.controls = true;
+    fullScreenView.appendChild(video);
+  } else if (attachment.file.type.startsWith('audio/')) {
+    const audio = document.createElement('audio');
+    audio.src = attachment.url;
+    audio.controls = true;
+    fullScreenView.appendChild(audio);
+  } else {
+    const fallback = document.createElement('div');
+    fallback.classList.add('fallback-preview');
+    fallback.innerText = attachment.file.name;
+    fullScreenView.appendChild(fallback);
+  }
+
+  fullScreenView.style.display = 'flex';
+}
+
+function closeFullScreenView() {
+  const fullScreenView = document.getElementById('full-screen-view');
+  fullScreenView.style.display = 'none';
+  fullScreenView.innerHTML = '';
 }
 
 async function fileToGenerativePart(file) {
@@ -232,6 +277,7 @@ async function sendMessage() {
     stopButton.style.display = 'none';
     newHistory.push({ role: 'assistant', content: [{ text: fullResponse }] });
     updateChatHistory(newHistory);
+    addCopyButtonsToCodeBlocks();
   } catch (error) {
     showErrorMessage(error.message);
     const blinkingCircle = document.querySelector('.blinking-circle');
@@ -239,6 +285,37 @@ async function sendMessage() {
       blinkingCircle.remove();
     }
     stopButton.style.display = 'none';
+  }
+}
+
+function addCopyButtonsToCodeBlocks() {
+  const codeBlocks = document.querySelectorAll('.response-container pre code');
+  codeBlocks.forEach(codeBlock => {
+    const preElement = codeBlock.parentNode;
+    if (!preElement.querySelector('.copy-button')) {
+      const copyButton = document.createElement('button');
+      copyButton.classList.add('copy-button');
+      copyButton.textContent = 'Copy';
+      copyButton.addEventListener('click', () => {
+        copyCodeToClipboard(codeBlock.textContent, copyButton);
+      });
+      preElement.appendChild(copyButton);
+    }
+  });
+}
+
+async function copyCodeToClipboard(code, button) {
+  try {
+    await navigator.clipboard.writeText(code);
+    button.textContent = 'Copied!';
+    button.classList.add('copy-success');
+    setTimeout(() => {
+      button.textContent = 'Copy';
+      button.classList.remove('copy-success');
+    }, 2000);
+  } catch (err) {
+    console.error('Failed to copy code:', err);
+    button.textContent = 'Error';
   }
 }
 
