@@ -223,14 +223,17 @@ async function fileToGenerativePart(file) {
 }
 
 async function sendMessage() {
+  const input = document.querySelector('.input-bar');
+  const message = input.value.trim();
+  if (!message && attachments.length === 0) {
+    showErrorMessage('Please say something.');
+    return;
+  };
   const stopButton = document.querySelector('.stop-button');
   stopButton.style.display = 'flex';
   stopGenerationFlag = false;
   const chat = model.startChat({ history: getHistory() });
   const newHistory = [];
-  const input = document.querySelector('.input-bar');
-  const message = input.value.trim();
-  if (!message && attachments.length === 0) return;
 
   const attachmentParts = await Promise.all(
     attachments.map(async (attachment) => await fileToGenerativePart(attachment.file))
